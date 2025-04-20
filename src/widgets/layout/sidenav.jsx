@@ -12,6 +12,9 @@ import { useMaterialTailwindController, setOpenSidenav } from "@/context";
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavColor, sidenavType, openSidenav } = controller;
+
+  const isAuthenticated = Boolean(localStorage.getItem("token"));
+
   const sidenavTypes = {
     dark: "bg-gradient-to-br from-gray-800 to-gray-900",
     white: "bg-white shadow-sm",
@@ -44,50 +47,72 @@ export function Sidenav({ brandImg, brandName, routes }) {
           <XMarkIcon strokeWidth={2.5} className="h-5 w-5 text-white" />
         </IconButton>
       </div>
+
       <div className="m-4">
-        {routes.map(({ layout, title, pages }, key) => (
-          <ul key={key} className="mb-4 flex flex-col gap-1">
-            {title && (
-              <li className="mx-3.5 mt-4 mb-2">
-                <Typography
-                  variant="small"
-                  color={sidenavType === "dark" ? "white" : "blue-gray"}
-                  className="font-black uppercase opacity-75"
-                >
-                  {title}
-                </Typography>
-              </li>
-            )}
-            {pages.map(({ icon, name, path }) => (
-              <li key={name}>
-                <NavLink to={`/${layout}${path}`}>
-                  {({ isActive }) => (
-                    <Button
-                      variant={isActive ? "gradient" : "text"}
-                      color={
-                        isActive
-                          ? sidenavColor
-                          : sidenavType === "dark"
-                          ? "white"
-                          : "blue-gray"
-                      }
-                      className="flex items-center gap-4 px-4 capitalize"
-                      fullWidth
-                    >
-                      {icon}
-                      <Typography
-                        color="inherit"
-                        className="font-medium capitalize"
-                      >
-                        {name}
-                      </Typography>
-                    </Button>
-                  )}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        ))}
+        {isAuthenticated &&
+          routes.map(({ layout, title, pages }, key) => (
+            <ul key={key} className="mb-4 flex flex-col gap-1">
+              {title && (
+                <li className="mx-3.5 mt-4 mb-2">
+                  <Typography
+                    variant="small"
+                    color={sidenavType === "dark" ? "white" : "blue-gray"}
+                    className="font-black uppercase opacity-75"
+                  >
+                    {title}
+                  </Typography>
+                </li>
+              )}
+
+              {pages
+                .filter(({ name }) => !(name === "sign in" && isAuthenticated))
+                .map(({ icon, name, path }) => (
+                  <li key={name}>
+                    <NavLink to={`/${layout}${path}`}>
+                      {({ isActive }) => (
+                        <Button
+                          variant={isActive ? "gradient" : "text"}
+                          color={
+                            isActive
+                              ? sidenavColor
+                              : sidenavType === "dark"
+                              ? "white"
+                              : "blue-gray"
+                          }
+                          className="flex items-center gap-4 px-4 capitalize"
+                          fullWidth
+                        >
+                          {icon}
+                          <Typography
+                            color="inherit"
+                            className="font-medium capitalize"
+                          >
+                            {name}
+                          </Typography>
+                        </Button>
+                      )}
+                    </NavLink>
+                  </li>
+                ))}
+            </ul>
+          ))}
+
+        {/* Logout Button */}
+        {isAuthenticated && (
+          <div className="mx-3.5 mt-6">
+            <Button
+              color="red"
+              variant="outlined"
+              fullWidth
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.href = "/auth/sign-in";
+              }}
+            >
+              Logout
+            </Button>
+          </div>
+        )}
       </div>
     </aside>
   );

@@ -5,13 +5,15 @@ import {
   ServerStackIcon,
   UserGroupIcon,
   ShoppingCartIcon,
+  BriefcaseIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Tables } from "@/pages/dashboard";
+import { Home } from "@/pages/dashboard";
 import { SignIn } from "@/pages/auth";
 import User from "./pages/dashboard/Users";
 import Product from "./pages/dashboard/Products";
 import Message from "./pages/dashboard/Message";
 import Reports from "./pages/dashboard/Reports";
+import Business from "./pages/dashboard/business";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -32,6 +34,12 @@ export const routes = [
         name: "users",
         path: "/users",
         element: <User />,
+      },
+      {
+        icon: <BriefcaseIcon {...icon} />,
+        name: "business",
+        path: "/business",
+        element: <Business />,
       },
       {
         icon: <ShoppingCartIcon {...icon} />,

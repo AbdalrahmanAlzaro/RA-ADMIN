@@ -5,6 +5,8 @@ import { StatisticsChart } from "@/widgets/charts";
 import { statisticsCardsData, statisticsChartsData } from "@/data";
 import { ClockIcon } from "@heroicons/react/24/solid";
 
+import Subscription from "./Subscription";
+
 export function Home() {
   return (
     <div className="mt-12">
@@ -26,6 +28,7 @@ export function Home() {
           />
         ))}
       </div>
+      <Subscription />
       <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-2 xl:grid-cols-3">
         {statisticsChartsData.map((props) => (
           <StatisticsChart
